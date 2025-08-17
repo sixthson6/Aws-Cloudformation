@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Automating IAM Resources with GitSync
+
+Resources:
+  S3Group:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: S3-GroupA
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+
+  EC2Group:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: EC2-GroupB
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+
+  EC2User:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: EC2-UserB
+      Groups:
+        - !Ref EC2Group
+
+  S3User:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: S3-UserA
+      Groups:
+        - !Ref S3Group
