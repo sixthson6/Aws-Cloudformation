@@ -16,6 +16,13 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
 
+  EC2Group112:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: EC2-01-GroupB
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+
   EC2User:
     Type: AWS::IAM::User
     Properties:
