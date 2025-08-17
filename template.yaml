@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Simplified CloudFormation template for IAM users, groups, and secret password
+
+Parameters:
+  SharedPassword:
+    Type: String
+    Description: Temporary password for IAM users
+    Default: TempPass123!
+    No echo: true
+
+Resources:
+  MySecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: Temporary password for IAM users
+      SecretString: !Sub '{"password": "${SharedPassword}"}'
+
+  S3Group:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: S3UserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+
+  EC2Group:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: EC2UserGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+
+  Ec2User:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: ec2-user
+      Groups:
+        - !Ref EC2Group
+      LoginProfile:
+        Password: !Ref SharedPassword
+        PasswordResetRequired: true
+
+  S3User:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: s3-user
+      Groups:
+        - !Ref S3Group
+      LoginProfile:
+        Password: !Ref SharedPassword
+        PasswordResetRequired: true
+
+Outputs:
+  SecretArn:
+    Value: !Ref MySecret
+    Description: ARN of the Secrets Manager secret containing the password
+  Ec2UserName:
+    Value: !Ref Ec2User
+    Description: Name of the EC2 user
+  S3UserName:
+    Value: !Ref S3User
+    Description: Name of the S3 user
