@@ -1,4 +1,0 @@
-template-file-path: template.yaml
-parameters:
-  TemporaryPassword: '****'
-tags: {}
