@@ -6,7 +6,7 @@ Parameters:
     Type: String
     Description: Temporary password for IAM users
     Default: TempPass123!
-    No echo: true
+    NoEcho: true
 
 Resources:
   MySecret:
