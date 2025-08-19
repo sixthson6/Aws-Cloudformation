@@ -36,3 +36,10 @@ Resources:
       UserName: S3-UserA
       Groups:
         - !Ref S3Group
+
+  AnotherS3User:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: S3-UserB
+      Groups:
+        - !Ref S3Group
