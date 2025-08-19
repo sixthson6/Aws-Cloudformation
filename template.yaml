@@ -1,7 +1,22 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Automating IAM Resources with GitSync
 
+Parameters:
+  TemporaryPassword:
+    Type: String
+    Description: The temporary password for the IAM users. It must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+    Default: 'P@$$w0rd123'
+    NoEcho: true
+    AllowedPattern: (?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}
+    ConstraintDescription: Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.
+
 Resources:
+  TemporaryPasswordSecret:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Description: Stores the temporary password for IAM users.
+      SecretString: !Ref TemporaryPassword
+      
   S3Group:
     Type: AWS::IAM::Group
     Properties:
@@ -34,6 +49,13 @@ Resources:
     Type: AWS::IAM::User
     Properties:
       UserName: S3-UserA
+      Groups:
+        - !Ref S3Group
+
+  Sxithson6S3User:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: s3-sixthson6-user
       Groups:
         - !Ref S3Group
 
